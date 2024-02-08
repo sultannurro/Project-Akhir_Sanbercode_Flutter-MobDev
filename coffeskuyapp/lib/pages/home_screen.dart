@@ -1,148 +1,154 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
+
+Color mainColor = const Color(0x402625);
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomeScreen(),
+    );
+  }
+}
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
 
-  void _onItemTapped(int index) {
-    if (index == 2) {
-      Navigator.pushNamed(context, '/akun');
-    }else if (index == 1) {
-      Navigator.pushNamed(context, '/search');
-    }  
-    else {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+class _HomeScreenState extends State<HomeScreen> {
+  int currentTab = 0;
+  final List<Widget> screens = [
+    HomeWidget(), // Replace with actual screen for tab 0
+    AnotherScreen(), // Replace with actual screen for tab 1
+    YetAnotherScreen(), // Replace with actual screen for tab 2
+  ];
+
+  late Widget currentScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    currentScreen = screens[0]; // Set the initial screen
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _selectedIndex == 0
-              ? 'Home'
-              : _selectedIndex == 1
-                  ? 'Search'
-                  : 'Account',
-        ),
+      body: PageStorage(
+        bucket: PageStorageBucket(),
+        child: currentScreen,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Account',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
-        onTap: _onItemTapped,
-      ),
-      body: Center(
+      bottomNavigationBar: BottomAppBar(
+        shape: CircularNotchedRectangle(),
+        notchMargin: 10,
         child: Container(
-          padding: EdgeInsets.all(16),
-          margin: EdgeInsets.only(top: 5),
-          color: Colors.white,
-          child: ListView(
-            //mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                  child: Text(
-                    " Let's Find\n Your Dream Jobs",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w800, color: Colors.white,)),
-                  width: 390,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    gradient: LinearGradient(
-                    begin: Alignment(0.00, -1.00),
-                    end: Alignment(0, 1),
-                    colors: [Color(0xFF000114), Color(0xFF0074FE)],
-                    ),
-                  ),
-              ),         
-              const SizedBox(
-                height: 10,
-              ),
-            Container(
-              width: 276,
-              height: 56,
-              decoration: ShapeDecoration(
-                color: Color(0xFFECECEC),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-              ),
-              shadows: [
-                BoxShadow(
-                color: Color(0x3F000000),
-                blurRadius: 4,
-                offset: Offset(0, 4),
-                spreadRadius: 0,
-                )
-              ],
-              ),
-              child: TextField(
-              decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.search,
-                ),
-                hintText: "Search a job or position...",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-            ),
-            SizedBox(
-              height: 20
-            ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Jobs For You",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              jobs_item(context)
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              buildBottomNavItem(Icons.home, 0, "Home"),
+              buildBottomNavItem(Icons.bookmark, 1, "Bookmark"),
+              buildBottomNavItem(Icons.person, 2, "Account"),
             ],
           ),
         ),
       ),
-
     );
   }
-  Container jobs_item(BuildContext context) {
+
+  Widget buildBottomNavItem(IconData icon, int index, String label) {
+    return MaterialButton(
+      minWidth: 40,
+      onPressed: () {
+        setState(() {
+          currentTab = index;
+          currentScreen = screens[index];
+        });
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: currentTab == index ? Colors.blue : Colors.grey,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              color: currentTab == index ? Colors.blue : Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+final List<Container> containerList = [
+  Container(
+    width: 500,
+    height: 400,
+    color: Colors.grey,
+    child: Text('hai'),
+  ),
+  Container(
+    width: 500,
+    height: 400,
+    color: Colors.grey,
+    child: Text('halo'),
+  )
+];
+
+final List<Widget> containerSliders = containerList
+    .map((item) => Container(
+          child: Container(
+            margin: EdgeInsets.all(5.0),
+            child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                child: Stack(
+                  children: <Widget>[
+                    item,
+                    Positioned(
+                      bottom: 0.0,
+                      left: 0.0,
+                      right: 0.0,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 20.0),
+                      ),
+                    ),
+                  ],
+                )),
+          ),
+        ))
+    .toList();
+
+Container near_item(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height /2,
+      height: MediaQuery.of(context).size.height / 2,
       child: GridView.count(
           primary: false,
-          padding: const EdgeInsets.all(20),
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+          padding: const EdgeInsets.all(5),
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
           crossAxisCount: 2,
           children: <Widget>[
             Container(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Color(0xffE9FFEB),
                 borderRadius: BorderRadius.circular(10)),
@@ -152,8 +158,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Image.asset(
                     "assets/img/gojek.png",
-                    height: 20,
-                    width: 20,
+                    height: 50,
+                    width: 50,
                   ),
                   SizedBox(       
                     height: 16,
@@ -190,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Color(0xffFFFEBE7),
                 borderRadius: BorderRadius.circular(10)),
@@ -238,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Color(0xffFFFE2EB),
                 borderRadius: BorderRadius.circular(10)),
@@ -248,24 +254,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Image.asset(
                     "assets/img/bukalapak.png",
-                    height: 25,
-                    width: 25,
+                    height: 20,
+                    width: 20,
                   ),
                   SizedBox(       
-                    height: 5,
+                    height: 16,
                   ), 
                   Text(
                     "Front End Developer",
                     style: titleStyle(),
                   ),             
                   SizedBox(
-                    height: 5,
+                    height: 16,
                   ),
                   Text(           
                     "1-3 Year Experience",
                   ), 
                   SizedBox(       
-                    height: 10,
+                    height: 16,
                   ),
                   Row(           
                     children: [
@@ -286,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Color(0xffFFFEBE7),
                 borderRadius: BorderRadius.circular(10)),
@@ -344,4 +350,138 @@ class _HomeScreenState extends State<HomeScreen> {
     return TextStyle(fontSize: 15, fontWeight: FontWeight.w400);
   }
   TextStyle subTitle() => TextStyle(fontWeight: FontWeight.w500);
+
+class HomeWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        child: Container(
+          padding: EdgeInsets.all(16),
+          color: Colors.white,
+          child: ListView(
+            //mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 70, left: 100), //apply padding to all four sides
+                    child: Text(
+                    "COFFESKUY",
+                    style: GoogleFonts.jaldi(
+                      textStyle: TextStyle(fontSize: 32, 
+                          fontWeight: FontWeight.w600,
+                          color: Colors.brown,),
+                    ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.notifications,
+                    color: Colors.brown,
+                    size: 32.0,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: 20,
+                height: 50.0,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: 
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'search caffe of coffeshop',
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    errorBorder: InputBorder.none,
+                    disabledBorder: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12.0),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Recommended for you",
+                  style: GoogleFonts.inter(
+                      textStyle: TextStyle(fontSize: 19, 
+                          fontWeight: FontWeight.w500,
+                          color: Colors.brown,),
+                    ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                    aspectRatio: 16/9,
+                    enlargeCenterPage: false,
+                    enableInfiniteScroll: false,
+                    initialPage: 1,
+                    autoPlay: false,
+                    padEnds : false,
+                    ),
+                  items: containerSliders,
+                  )
+                )
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Caffe's near you",
+                  style: GoogleFonts.inter(
+                      textStyle: TextStyle(fontSize: 19, 
+                          fontWeight: FontWeight.w500,
+                          color: Colors.brown,),
+                    ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              near_item(context)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
+
+class AnotherScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Build your another screen widget here
+    return Center(child: Text("Another Screen"));
+  }
+}
+
+class YetAnotherScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Build your yet another screen widget here
+    return Center(child: Text("Yet Another Screen"));
+  }
+}
+
+// Place jobs_item, positionText, and titleStyle functions here

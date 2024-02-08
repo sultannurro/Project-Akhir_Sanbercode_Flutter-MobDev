@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:coffeskuyapp/pages/home_screen.dart';
 
+Color mainColor = const Color(0x402625);
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
