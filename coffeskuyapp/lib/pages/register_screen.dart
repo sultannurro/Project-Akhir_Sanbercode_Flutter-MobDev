@@ -1,16 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:coffeskuyapp/pages/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:coffeskuyapp/pages/register_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:coffeskuyapp/pages/login_screen.dart';
+import 'package:get/get.dart';
+
+
 
 Color mainColor = const Color(0x402625);
 
-class LoginScreen extends StatefulWidget {
+class RegisterScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
-
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -107,44 +109,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(20)),
                     child: TextButton(
                       onPressed: () async{
-                        await _firebaseAuth.signInWithEmailAndPassword(
+                        await _firebaseAuth.createUserWithEmailAndPassword(
                           email: _emailController.text, 
                           password: _passwordController.text,
-                        ); 
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => HomeScreen())
                         );
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => LoginScreen())
+                        );   
                       },
                       child: const Text(
-                        "Login",
+                        "Register",
                         style: TextStyle(
                           color: Color(0xffffffff), fontWeight: FontWeight.w500),
                       ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Dont Have an Account'),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => RegisterScreen())
-                        );
-                        },
-                        child: Text('Register'),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(right: 30),
-                    child: Row(mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text('Forget Password'),
-                      ),
-                    ],
                     ),
                   ),               
                 ],

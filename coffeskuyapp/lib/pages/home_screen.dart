@@ -1,97 +1,95 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
-
-Color mainColor = const Color(0x402625);
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomeScreen(),
-    );
-  }
-}
-
-class HomeScreen extends StatefulWidget {
+import 'package:get/get.dart';
+import 'package:coffeskuyapp/routes/route_name.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int currentTab = 0;
-  final List<Widget> screens = [
-    HomeWidget(), // Replace with actual screen for tab 0
-    AnotherScreen(), // Replace with actual screen for tab 1
-    YetAnotherScreen(), // Replace with actual screen for tab 2
-  ];
-
-  late Widget currentScreen;
-
-  @override
-  void initState() {
-    super.initState();
-    currentScreen = screens[0]; // Set the initial screen
-  }
-
-  @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    if (auth.currentUser != null){
+      print(auth.currentUser!.email);
+    }
     return Scaffold(
       body: PageStorage(
         bucket: PageStorageBucket(),
-        child: currentScreen,
+        child: currentScreen(),
       ),
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
-        notchMargin: 10,
         child: Container(
           height: 60,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              buildBottomNavItem(Icons.home, 0, "Home"),
-              buildBottomNavItem(Icons.bookmark, 1, "Bookmark"),
-              buildBottomNavItem(Icons.person, 2, "Account"),
+              ElevatedButton(
+              onPressed: () {
+                Get.toNamed(RouteName.home_screen);
+              },
+              style: ElevatedButton.styleFrom(elevation: 0,backgroundColor: Colors.transparent, foregroundColor: Colors.blue),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.home,
+                    color:  Colors.blue,
+                  ),
+                  Text(
+                    'Home',
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ) ,
+              ),
+              ElevatedButton(
+              onPressed: () {
+                Get.toNamed(RouteName.about_screen);
+              },
+              style: ElevatedButton.styleFrom(elevation: 0,backgroundColor: Colors.transparent, foregroundColor: Colors.blue),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.home,
+                    color:  Colors.grey,
+                  ),
+                  Text(
+                    'About Us',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ) ,
+              ),
+              ElevatedButton(
+              onPressed: () {
+                Get.toNamed(RouteName.account_screen);
+              },
+              style: ElevatedButton.styleFrom(elevation: 0,backgroundColor: Colors.transparent, foregroundColor: Colors.blue),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.person,
+                    color:  Colors.grey,
+                  ),
+                  Text(
+                    'Account',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ) ,
+              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget buildBottomNavItem(IconData icon, int index, String label) {
-    return MaterialButton(
-      minWidth: 40,
-      onPressed: () {
-        setState(() {
-          currentTab = index;
-          currentScreen = screens[index];
-        });
-      },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: currentTab == index ? Colors.blue : Colors.grey,
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              color: currentTab == index ? Colors.blue : Colors.grey,
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -103,14 +101,50 @@ final List<Container> containerList = [
     width: 500,
     height: 400,
     color: Colors.grey,
-    child: Text('hai'),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+      Image.asset(
+        "assets/img/coffe1.jpg",
+        height: 150,
+        width: 200,
+        ),
+      Text('Bagi Kopi'),
+      Text('Jalan Buah Batu')
+    ],)
   ),
   Container(
     width: 500,
     height: 400,
     color: Colors.grey,
-    child: Text('halo'),
-  )
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+      Image.asset(
+        "assets/img/coffe1.jpg",
+        height: 150,
+        width: 200,
+        ),
+      Text('Bagi Kopi'),
+      Text('Jalan Buah Batu')
+    ],)
+  ),
+  Container(
+    width: 500,
+    height: 400,
+    color: Colors.grey,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+      Image.asset(
+        "assets/img/coffe1.jpg",
+        height: 150,
+        width: 200,
+        ),
+      Text('Bagi Kopi'),
+      Text('Jalan Buah Batu')
+    ],)
+  ),
 ];
 
 final List<Widget> containerSliders = containerList
@@ -156,42 +190,27 @@ Container near_item(BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/img/gojek.png",
-                    height: 50,
-                    width: 50,
-                  ),
                   SizedBox(       
-                    height: 16,
-                  ), 
+                    height: 7,
+                  ),
+                  Image.asset(
+                    "assets/img/coffe1.jpg",
+                    height: 90,
+                    width: 150,
+                  ),
+                  SizedBox(
+                    height: 7,
+                  ),
                   Text(
-                    "Digital Marketing",
+                    "Bagi Kopi Buah Batu",
                     style: titleStyle(),
                   ),             
                   SizedBox(
-                    height: 16,
+                    height: 4,
                   ),
                   Text(           
-                    "1-3 Year Experience",
+                    "Jalan Dago",
                   ), 
-                  SizedBox(       
-                    height: 16,
-                  ),
-                  Row(           
-                    children: [
-                      Text(
-                        "FullTime",
-                          style: positionText(),
-                      ), 
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        "Senior",
-                        style: positionText(),
-                      ), 
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -204,42 +223,27 @@ Container near_item(BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/img/shopee.png",
-                    height: 20,
-                    width: 20,
-                  ),
                   SizedBox(       
-                    height: 16,
-                  ), 
+                    height: 7,
+                  ),
+                  Image.asset(
+                    "assets/img/coffe1.jpg",
+                    height: 90,
+                    width: 150,
+                  ),
+                  SizedBox(
+                    height: 7,
+                  ),
                   Text(
-                    "Content Creator",
+                    "Bagi Kopi Buah Batu",
                     style: titleStyle(),
                   ),             
                   SizedBox(
-                    height: 16,
+                    height: 4,
                   ),
                   Text(           
-                    "1-3 Year Experience",
+                    "Jalan Dago",
                   ), 
-                  SizedBox(       
-                    height: 16,
-                  ),
-                  Row(           
-                    children: [
-                      Text(
-                        "FullTime",
-                          style: positionText(),
-                      ), 
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        "Internship",
-                        style: positionText(),
-                      ), 
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -252,42 +256,27 @@ Container near_item(BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/img/bukalapak.png",
-                    height: 20,
-                    width: 20,
-                  ),
                   SizedBox(       
-                    height: 16,
-                  ), 
+                    height: 7,
+                  ),
+                  Image.asset(
+                    "assets/img/coffe1.jpg",
+                    height: 90,
+                    width: 150,
+                  ),
+                  SizedBox(
+                    height: 7,
+                  ),
                   Text(
-                    "Front End Developer",
+                    "Bagi Kopi Buah Batu",
                     style: titleStyle(),
                   ),             
                   SizedBox(
-                    height: 16,
+                    height: 4,
                   ),
                   Text(           
-                    "1-3 Year Experience",
+                    "Jalan Dago",
                   ), 
-                  SizedBox(       
-                    height: 16,
-                  ),
-                  Row(           
-                    children: [
-                      Text(
-                        "FullTime",
-                          style: positionText(),
-                      ), 
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        "Senior",
-                        style: positionText(),
-                      ), 
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -300,42 +289,27 @@ Container near_item(BuildContext context) {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/img/blibli.png",
-                    height: 20,
-                    width: 20,
-                  ),
                   SizedBox(       
-                    height: 16,
-                  ), 
+                    height: 7,
+                  ),
+                  Image.asset(
+                    "assets/img/coffe1.jpg",
+                    height: 90,
+                    width: 150,
+                  ),
+                  SizedBox(
+                    height: 7,
+                  ),
                   Text(
-                    "UI/UX Designer",
+                    "Bagi Kopi Buah Batu",
                     style: titleStyle(),
                   ),             
                   SizedBox(
-                    height: 16,
+                    height: 4,
                   ),
                   Text(           
-                    "1-3 Year Experience",
+                    "Jalan Dago",
                   ), 
-                  SizedBox(       
-                    height: 16,
-                  ),
-                  Row(           
-                    children: [
-                      Text(
-                        "FullTime",
-                          style: positionText(),
-                      ), 
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        "Senior",
-                        style: positionText(),
-                      ), 
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -351,7 +325,7 @@ Container near_item(BuildContext context) {
   }
   TextStyle subTitle() => TextStyle(fontWeight: FontWeight.w500);
 
-class HomeWidget extends StatelessWidget {
+class currentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -465,22 +439,6 @@ class HomeWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class AnotherScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Build your another screen widget here
-    return Center(child: Text("Another Screen"));
-  }
-}
-
-class YetAnotherScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Build your yet another screen widget here
-    return Center(child: Text("Yet Another Screen"));
   }
 }
 
