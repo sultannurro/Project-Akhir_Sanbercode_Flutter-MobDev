@@ -17,24 +17,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  registerSubmit() async {
+  try {
+    final user = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+    );
+  } catch (e) {
+    print(e);
+    SnackBar(content: Text(e.toString()));
+  }
+}
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         child: Stack(
           children: [
             Image.asset("assets/img/login_top.png"),
             Positioned(
-              top: 20.0,
-              left: 10.0,
+              top: 60.0,
+              left: 50.0,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Welcome Back!",
-                    style:TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                    "Let’s Get Started",
+                    style:TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 32),
                   ),
+                  Text(
+                    "Create an Account to Get All Features",
+                    style:TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20),
+                  )
                 ],
               ),
             ),
@@ -70,8 +92,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                        labelText: 'Username',
-                        hintText: 'Enter your username',
+                        labelText: 'Email',
+                        hintText: 'Enter your email',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -87,6 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: 274,                    
                     child: TextFormField(
                       controller: _passwordController,
+                      obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
                         hintText: 'Enter your password',
@@ -104,18 +127,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 44,
                     width: 274,
                     decoration: BoxDecoration(
-                      color: Color(0xff475BD8),
+                      color: Colors.brown,
                       border: Border.all(color: Color(0xff475BD8)),
                       borderRadius: BorderRadius.circular(20)),
                     child: TextButton(
                       onPressed: () async{
-                        await _firebaseAuth.createUserWithEmailAndPassword(
-                          email: _emailController.text, 
-                          password: _passwordController.text,
-                        );
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => LoginScreen())
-                        );   
+                        registerSubmit();
                       },
                       child: const Text(
                         "Register",
@@ -123,6 +140,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           color: Color(0xffffffff), fontWeight: FontWeight.w500),
                       ),
                     ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Already have an Account'),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => LoginScreen())
+                        );
+                        },
+                        child: Text('Login'),
+                      ),
+                    ],
                   ),               
                 ],
               ),

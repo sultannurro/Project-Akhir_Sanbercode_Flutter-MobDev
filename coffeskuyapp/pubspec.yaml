@@ -43,6 +43,9 @@ dependencies:
   dio: ^4.0.6
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4
+  http: ^1.2.0
+
+
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +84,12 @@ flutter:
     - assets/img/logo_blk2.png
     - assets/img/login_top.png
     - assets/img/coffe1.jpg
+    - assets/img/coffe2.jpg
+    - assets/img/coffe3.jpg
+    - assets/img/coffe4.jpg
+    - assets/img/coffe5.jpg
+    - assets/img/coffe6.jpg
+    - assets/img/profile.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

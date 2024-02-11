@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 
       ),
 
-      home: HomeScreen(),
+      home: LoginScreen(),
       getPages: PageRouteApp.pages,
 //      routes: {
 //        '/search': (context) => SearchScreen(),

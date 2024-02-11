@@ -15,24 +15,45 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  loginSubmit() async {
+  try {
+    final user = await _firebaseAuth.signInWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(),
+      ),
+    );
+  } catch (e) {
+    print(e);
+    SnackBar(content: Text(e.toString()));
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         child: Stack(
           children: [
             Image.asset("assets/img/login_top.png"),
             Positioned(
-              top: 20.0,
-              left: 10.0,
+              top: 60.0,
+              left: 25.0,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     "Welcome Back!",
-                    style:TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                    style:TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 32),
                   ),
+                  Text(
+                    "Log in to your existant account of CoffeSkuy",
+                    style:TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20),
+                  )
                 ],
               ),
             ),
@@ -68,8 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
-                        labelText: 'Username',
-                        hintText: 'Enter your username',
+                        labelText: 'Email',
+                        hintText: 'Enter your email',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -85,6 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 274,                    
                     child: TextFormField(
                       controller: _passwordController,
+                      obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Password',
                         hintText: 'Enter your password',
@@ -102,18 +124,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 44,
                     width: 274,
                     decoration: BoxDecoration(
-                      color: Color(0xff475BD8),
+                      color: Colors.brown,
                       border: Border.all(color: Color(0xff475BD8)),
                       borderRadius: BorderRadius.circular(20)),
                     child: TextButton(
                       onPressed: () async{
-                        await _firebaseAuth.signInWithEmailAndPassword(
-                          email: _emailController.text, 
-                          password: _passwordController.text,
-                        ); 
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => HomeScreen())
-                        );
+                       loginSubmit();
                       },
                       child: const Text(
                         "Login",
